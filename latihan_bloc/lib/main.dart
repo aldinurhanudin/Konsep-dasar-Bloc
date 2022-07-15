@@ -19,6 +19,8 @@ class MyApp extends StatelessWidget {
 class CounterCubit extends Cubit<int> {
   CounterCubit({this.inisialData = 0}) : super(inisialData);
   int inisialData;
+  // int? current;
+  // int? next;
 
   void tambahData() {
     emit(state + 1); //yield package dari sananya/package bloc
@@ -26,6 +28,24 @@ class CounterCubit extends Cubit<int> {
 
   void kurangData() {
     emit(state - 1);
+  }
+//bloc punya fitur untuk kita bisa memantau suatu aplikasinya dengan materi
+  //Observer
+  //-perubahan (onChange)
+  // -error (on error)
+
+  @override
+  void onChange(Change<int> change) {
+    super.onChange(change);
+    print(change);
+    // current = change.currentState; //untuk mau ditampilkan diwidget
+    // next = change.nextState;
+  }
+//bloc juga punya untuk mengecek error
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    super.onError(error, stackTrace);
+    print(error);
   }
 }
 
