@@ -9,39 +9,56 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BLOC BUILDER"),
+        title: const Text("BLOC Listener"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocBuilder<Counter, int>(
-              bloc: mycounter,
-              // buildWhen: (previous, current) {
-              //   if (current % 2 == 1) {
-              //     return true;
-              //   } else {
-              //     return false;
-              //   }
-              // },
-              builder: (context, state) {
-                return Text(
-                  "$state",
-                  style: const TextStyle(
-                    fontSize: 50,
-                  ),
-                );
-              }),
-          StreamBuilder(
-              initialData: mycounter.init,
-              stream: mycounter.stream,
-              builder: (context, snapshot) {
-                return Text(
-                  "${snapshot.data}",
-                  style: const TextStyle(
-                    fontSize: 50,
-                  ),
-                );
-              }),
+          BlocListener(
+            bloc: mycounter,
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Sudah mencapai 15"),
+                ),
+              );
+            },
+            listenWhen: (previous, current) {
+              if (current == 15) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            child: BlocBuilder<Counter, int>(
+                bloc: mycounter,
+                // buildWhen: (previous, current) {
+                //   if (current % 2 == 1) {
+                //     return true;
+                //   } else {
+                //     return false;
+                //   }
+                // },
+                builder: (context, state) {
+                  return Text(
+                    "$state",
+                    style: const TextStyle(
+                      fontSize: 50,
+                    ),
+                  );
+                }),
+          ),
+          // StreamBuilder(
+          //     initialData: mycounter.init,
+          //     stream: mycounter.stream,
+          //     builder: (context, snapshot) {
+          //       return Text(
+          //         "${snapshot.data}",
+          //         style: const TextStyle(
+          //           fontSize: 50,
+          //         ),
+          //       );
+          //     }),
           const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
