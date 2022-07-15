@@ -1,3 +1,4 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,46 +16,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class CounterCubit extends Cubit<int> {
+  CounterCubit({this.inisialData = 0}) : super(inisialData);
+  int inisialData;
 
-  Stream<int> countStream() async* {
-    for (int i = 1; i <= 10; i++) {
-      await Future.delayed(const Duration(seconds: 1));
-      yield i;
-    }
+  void tambahData() {
+    emit(state + 1); //yield package dari sananya/package bloc
   }
+
+  void kurangData() {
+    emit(state - 1);
+  }
+}
+
+class HomePage extends StatelessWidget {
+  CounterCubit mycounter = CounterCubit(inisialData: 0);
 
   @override
   Widget build(BuildContext context) {
-    print("Rebuild");
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Stream Apps"),
+        title: const Text("Cubit Apps"),
       ),
-      body: StreamBuilder(
-        stream: countStream(),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: Text(
-                "Loading",
-                style: TextStyle(
-                  fontSize: 50,
-                ),
-              ),
-            );
-          } else {
-            return Center(
-              child: Text(
-                "${snapshot.data}",
-                style: const TextStyle(
-                  fontSize: 50,
-                ),
-              ),
-            );
-          }
-        }),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          StreamBuilder(
+              initialData: mycounter.inisialData,
+              stream: mycounter.stream,
+              builder: (context, snapshot) {
+                return Center(
+                  child: Text(
+                    "${snapshot.data}",
+                    style: const TextStyle(
+                      fontSize: 50,
+                    ),
+                  ),
+                );
+              }),
+          const SizedBox(height: 20),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            IconButton(
+              onPressed: () {
+                mycounter.kurangData();
+              },
+              icon: const Icon(Icons.remove),
+            ),
+            IconButton(
+              onPressed: () {
+                mycounter.tambahData();
+              },
+              icon: const Icon(Icons.add),
+            ),
+          ])
+        ],
       ),
     );
   }
