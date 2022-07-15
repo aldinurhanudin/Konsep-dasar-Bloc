@@ -16,13 +16,13 @@ class HomePage extends StatelessWidget {
         children: [
           BlocBuilder<Counter, int>(
               bloc: mycounter,
-              buildWhen: (previous, current) {
-                if (current % 2 == 1) {
-                  return true;
-                } else {
-                  return false;
-                }
-              },
+              // buildWhen: (previous, current) {
+              //   if (current % 2 == 1) {
+              //     return true;
+              //   } else {
+              //     return false;
+              //   }
+              // },
               builder: (context, state) {
                 return Text(
                   "$state",
