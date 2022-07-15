@@ -9,45 +9,77 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("BLOC Listener"),
+        title: const Text("BLOC Consumer"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocListener(
+          BlocConsumer<Counter, int>(
             bloc: mycounter,
-            listener: (context, state) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Sudah mencapai 15"),
-                ),
-              );
-            },
-            listenWhen: (previous, current) {
-              if (current == 15) {
+            buildWhen: (previous, current) {
+              if (current >= 1) {
                 return true;
               } else {
                 return false;
               }
             },
-            child: BlocBuilder<Counter, int>(
-                bloc: mycounter,
-                // buildWhen: (previous, current) {
-                //   if (current % 2 == 1) {
-                //     return true;
-                //   } else {
-                //     return false;
-                //   }
-                // },
-                builder: (context, state) {
-                  return Text(
-                    "$state",
-                    style: const TextStyle(
-                      fontSize: 50,
-                    ),
-                  );
-                }),
+            builder: (context, state) {
+              return Text(
+                "$state",
+                style: const TextStyle(
+                  fontSize: 50,
+                ),
+              );
+            },
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Data Genap"),
+                ),
+              );
+            },
+            listenWhen: (previous, current) {
+              if (current % 2 == 0) {
+                return true;
+              } else {
+                return false;
+              }
+            },
           ),
+          // BlocListener<Counter, int>(
+          //   bloc: mycounter,
+          //   listener: (context, state) {
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       SnackBar(
+          //         content: Text("Data Genap"),
+          //       ),
+          //     );
+          //   },
+          //   listenWhen: (previous, current) {
+          //     if (current % 2 == 0) {
+          //       return true;
+          //     } else {
+          //       return false;
+          //     }
+          //   },
+          //   child: BlocBuilder<Counter, int>(
+          //       bloc: mycounter,
+          //       // buildWhen: (previous, current) {
+          //       //   if (current % 2 == 1) {
+          //       //     return true;
+          //       //   } else {
+          //       //     return false;
+          //       //   }
+          //       // },
+          //       builder: (context, state) {
+          //         return Text(
+          //           "$state",
+          //           style: const TextStyle(
+          //             fontSize: 50,
+          //           ),
+          //         );
+          //       }),
+          // ),
           // StreamBuilder(
           //     initialData: mycounter.init,
           //     stream: mycounter.stream,
